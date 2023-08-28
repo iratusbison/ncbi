@@ -1,0 +1,34 @@
+<!-- gene_sequence_app/templates/gene_sequence.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gene Sequence and PubMed Articles</title>
+</head>
+<body>
+    <h1>Gene Sequence Retrieval</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="gene_name">Enter Gene Name:</label>
+        <input type="text" id="gene_name" name="gene_name" required>
+        <button type="submit">Retrieve Gene Sequence</button>
+    </form>
+
+    {% if gene_sequence %}
+        <h2>Gene Sequence:</h2>
+        <pre>{{ gene_sequence }}</pre>
+    {% endif %}
+
+    {% if articles_data %}
+        {% if articles_data.esearchresult %}
+            <h2>PubMed Articles:</h2>
+            <ul>
+                {% for id in articles_data.esearchresult.idlist %}
+                    <li><a href="https://pubmed.ncbi.nlm.nih.gov/{{ id }}/">{{ id }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No PubMed articles found for this gene.</p>
+        {% endif %}
+    {% endif %}
+</body>
+</html>
